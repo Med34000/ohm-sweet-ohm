@@ -1,0 +1,200 @@
+<!doctype html>
+<!-- 2026-09-30 ≈ 18:28 (Europe/Zurich) — Codex / OpenAI : laboratoire et flux synchronisés à la puissance. -->
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f3f3ef">
+  <meta name="description" content="Et si ralentir rechargeait la batterie ? Révèle ce qui se passe sous la carrosserie et suis l’énergie dans une voiture électrique en 3D.">
+  <title>Ohm Sweet Ohm — L’électrique, de l’intérieur</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='20' fill='%23cefa83'/%3E%3Cpath d='M36 9 19 35h13l-4 20 19-29H33z' fill='%23131f18'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/styles.css?v=20260930-4">
+</head>
+<body>
+  <div class="app" id="app" data-mode="charge">
+    <header class="header">
+      <a href="#" class="brand" id="home" aria-label="Ohm Sweet Ohm, revenir à la découverte"><span class="brand-symbol" aria-hidden="true">Ω</span><span class="brand-name">ohm sweet ohm<span class="brand-dot">.</span></span><span class="brand-sub">BERLINE ÉLECTRIQUE<br>EXPLORATION 3D</span></a>
+      <nav class="nav" aria-label="Parcours de découverte">
+        <button data-screen="lab" class="nav-item active" aria-pressed="true">Explorer</button>
+        <button data-screen="parts" class="nav-item" aria-pressed="false">Comprendre</button>
+        <button data-screen="challenge" class="nav-item" aria-pressed="false">Le défi <span aria-hidden="true">↗</span></button>
+      </nav>
+      <button class="about-btn" id="about-open" aria-label="À propos, sources et crédits">?</button>
+    </header>
+
+    <main>
+      <section class="story" aria-labelledby="story-title">
+        <div class="eyebrow"><span class="live-dot"></span><span id="story-kicker">L’ATELIER INTERACTIF</span></div>
+        <h1 id="story-title">Et si ralentir<br><em>rechargeait la batterie&nbsp;?</em></h1>
+        <p class="story-copy" id="story-copy">Ouvre la voiture. Suis l’énergie, puis découvre comment le moteur devient générateur.</p>
+        <div class="story-actions">
+          <button class="text-action hero-action" id="story-action">Révéler l’énergie <span aria-hidden="true">↗</span></button>
+          <button class="motor-secret" id="motor-secret"><span aria-hidden="true">◎</span> Le secret du moteur</button>
+          <button class="text-action story-play" id="story-play"><span aria-hidden="true">▶</span> Voir l’histoire en 51 s</button>
+          <button class="technical-entry" id="technical-entry">Comprendre les pièces <span aria-hidden="true">→</span></button>
+        </div>
+        <div class="parts-list" id="parts-list" hidden aria-label="Pièces à explorer"></div>
+        <div class="discovery-progress" id="discovery-progress"><div class="discovery-track"><i></i><i></i><i></i></div><span id="discovery-copy">Trois gestes. Tout devient clair.</span></div>
+      </section>
+
+      <div class="story-overlay" id="story-overlay" hidden>
+        <nav class="story-progress" id="story-progress" aria-label="Chapitres de l’histoire">
+          <button aria-label="Chapitre 1 : introduction"><i></i></button><button aria-label="Chapitre 2 : le câble"><i></i></button><button aria-label="Chapitre 3 : la conversion"><i></i></button><button aria-label="Chapitre 4 : le stockage"><i></i></button><button aria-label="Chapitre 5 : le moteur"><i></i></button><button aria-label="Chapitre 6 : l’accélération"><i></i></button><button aria-label="Chapitre 7 : la vitesse stable"><i></i></button><button aria-label="Chapitre 8 : la récupération"><i></i></button><button aria-label="Chapitre 9 : l’essentiel"><i></i></button>
+        </nav>
+        <div class="story-hud" id="story-hud" aria-hidden="true">
+          <div><small id="hud-kw-label">PUISSANCE</small><b><span id="hud-kw">0</span><em>kW</em></b></div>
+          <div><small>VITESSE</small><b><span id="hud-speed">0</span><em>km/h</em></b></div>
+          <div><small>BATTERIE</small><b><span id="hud-soc">62,0</span><em>%</em></b></div>
+        </div>
+        <button id="story-pause" class="story-pause" aria-label="Mettre l’histoire en pause" aria-pressed="false">Ⅱ</button>
+        <button id="story-skip" class="story-skip">Passer <span aria-hidden="true">›</span></button>
+        <div class="story-card" id="story-card">
+          <span class="sv-kicker" id="sv-kicker"></span>
+          <h2 class="sv-title" id="sv-title"></h2>
+          <p class="sv-text" id="sv-text"></p>
+          <div class="story-end" id="story-end" hidden>
+            <button id="story-explore" class="story-cta">Explorer librement <span aria-hidden="true">→</span></button>
+            <button id="story-replay" class="story-ghost"><span aria-hidden="true">↺</span> Revoir l’histoire</button>
+          </div>
+        </div>
+      </div>
+      <div class="stage-title" aria-hidden="true"><span>ÉLECTRIQUE</span><span>01 — BERLINE ÉLECTRIQUE</span></div>
+      <div id="scene" aria-label="Voiture électrique en 3D"></div>
+      <div class="current-legend" id="current-legend" hidden role="status" aria-live="off">
+        <div class="current-reading"><span class="current-bolt" aria-hidden="true">Ω</span><strong id="current-value">—</strong><span id="current-route"></span></div>
+        <ul class="current-kinds" aria-label="Couleurs du trajet">
+          <li style="--kind:#3ad6ff" data-kind="grid">Réseau AC</li>
+          <li style="--kind:#b9f35c" data-kind="dc">Continu DC</li>
+          <li style="--kind:#ffad3a" data-kind="ac3">Triphasé</li>
+          <li style="--kind:#f2f5ff" data-kind="mech">Mouvement</li>
+          <li style="--kind:#ff5a36" data-kind="heat">Chaleur perdue</li>
+        </ul>
+      </div>
+      <div class="model-caption"><span class="model-caption-line"></span><span>BERLINE ÉLECTRIQUE</span><span class="model-caption-detail">ÉTUDE INTERACTIVE</span></div>
+      <div class="scene-status" id="scene-status"><span class="status-dot"></span><span id="status-copy">Prête à être explorée</span></div>
+      <div class="scene-labels" id="scene-labels" aria-label="Sélectionner une pièce dans la scène">
+        <button class="hotspot" data-part="battery"><span class="hotspot-dot"></span><span>Batterie<small>La réserve d’énergie</small></span><b>↗</b></button>
+        <button class="hotspot" data-part="motor"><span class="hotspot-dot"></span><span>Moteur<small>L’énergie devient mouvement</small></span><b>↗</b></button>
+        <button class="hotspot" data-part="chargePort"><span class="hotspot-dot"></span><span>Prise de charge<small>Tout commence ici</small></span><b>↗</b></button>
+      </div>
+      <div class="internal-labels" id="internal-labels" hidden aria-label="Repères du composant ouvert">
+        <span class="internal-label" data-anchor="stator"><b>Stator</b><small>Les bobines restent fixes</small></span>
+        <span class="internal-label" data-anchor="rotor"><b>Rotor</b><small>Les aimants tournent</small></span>
+        <span class="exploded-caption">Vue éclatée · pièces séparées pour l’observation</span>
+      </div>
+      <div class="motor-stage-guide" aria-label="Repères du moteur">
+        <p id="motor-stage-caption">Des bobines fixes. Un champ tournant. Un rotor entraîné.</p>
+        <ul class="motor-mechanism-legend" aria-label="Lire le mécanisme">
+          <li class="mechanism-current">3 courants</li>
+          <li class="mechanism-field">Champ tournant</li>
+          <li class="mechanism-motion">Mouvement</li>
+          <li class="mechanism-poles">N / S : pôles des aimants</li>
+        </ul>
+      </div>
+      <div class="view-tools" aria-label="Commandes de la vue 3D">
+        <button id="current-toggle" class="current-toggle" aria-pressed="false"><span aria-hidden="true">Ω</span> Voir le courant</button>
+        <details class="view-menu" id="view-menu">
+          <summary><span aria-hidden="true">◈</span> Vue <span class="menu-chevron" aria-hidden="true">⌄</span></summary>
+          <div class="view-menu-panel">
+            <div class="camera-tools" role="group" aria-label="Points de vue">
+              <span>POINT DE VUE</span>
+              <button data-camera="overview" aria-pressed="true" title="Vue trois quarts">¾</button>
+              <button data-camera="front" aria-pressed="false">Face</button>
+              <button data-camera="side" aria-pressed="false">Profil</button>
+              <button data-camera="top" aria-pressed="false">Dessus</button>
+            </div>
+            <div class="paint-picker" id="paint-picker" role="group" aria-label="Couleur de la carrosserie">
+              <span>TEINTE</span>
+              <button class="paint-swatch" data-paint="c6d0d9" style="--swatch:#c6d0d9" aria-label="Carrosserie argent glacier" aria-pressed="false"></button>
+              <button class="paint-swatch" data-paint="374252" style="--swatch:#374252" aria-label="Carrosserie graphite" aria-pressed="true"></button>
+              <button class="paint-swatch" data-paint="285b8b" style="--swatch:#285b8b" aria-label="Carrosserie bleu profond" aria-pressed="false"></button>
+            </div>
+            <div class="view-options">
+              <button id="labels-toggle" aria-pressed="false"><span aria-hidden="true">⌖</span> Repères</button>
+              <button id="xray-toggle" aria-pressed="false"><span aria-hidden="true">◈</span> Voir à travers</button>
+              <button id="reset-view"><span aria-hidden="true">↺</span> Recentrer la voiture</button>
+            </div>
+          </div>
+        </details>
+        <button id="pause-toggle" class="round-tool" aria-label="Mettre en pause" aria-pressed="false">Ⅱ</button>
+      </div>
+      <div class="orbit-hint"><span aria-hidden="true">↔</span> Tourne <i>·</i> Zoome <i>·</i> Explore un organe</div>
+
+      <div id="overview-caption" class="overview-caption" hidden><strong>L’énergie, pièce par pièce.</strong><span>Batterie ouverte · moteur en coupe · électronique et câbles HT</span><small>Organes espacés pour comprendre. Liaisons schématiques.</small></div>
+      <section class="detail-sheet" id="detail-sheet" hidden aria-labelledby="detail-title">
+        <button class="close-button" id="detail-close" aria-label="Fermer le détail de la pièce">×</button>
+        <div class="eyebrow" id="detail-kicker">À L’INTÉRIEUR</div>
+        <h2 id="detail-title">La batterie</h2>
+        <p id="detail-simple"></p>
+        <div class="component-diagram" id="component-diagram" aria-hidden="true"></div>
+        <div class="detail-actions">
+          <button id="inside-toggle" class="primary-small" aria-pressed="false">Ouvrir la pièce <span>↗</span></button>
+          <button id="technical-toggle" class="subtle-button" aria-expanded="false" aria-controls="technical-copy">Aller plus loin +</button>
+        </div>
+        <section class="study-panel" id="study-panel" hidden aria-label="Comprendre le composant pas à pas">
+          <div class="study-eyebrow">REGARDE CE QUI SE PASSE</div>
+          <div class="study-steps" id="study-steps" role="group" aria-label="Étapes de découverte"></div>
+          <p id="study-copy" aria-live="polite"></p>
+          <label class="study-opening" for="study-open"><span>Écarter les éléments</span><input type="range" id="study-open" min="0" max="100" value="100" aria-label="Ouverture du composant"><output id="study-open-value">100 %</output></label>
+          <div class="study-motion-controls">
+            <button id="motor-demo" class="demo-control" aria-pressed="true" hidden>Ⅱ Immobiliser la démonstration</button>
+            <button id="study-pause" class="demo-control" aria-pressed="false">Ⅱ Figer les flux</button>
+          </div>
+          <p class="study-note" id="study-note">Pièces écartées pour comprendre · agencement illustratif.</p>
+        </section>
+        <div id="technical-copy" class="technical-copy" hidden></div>
+      </section>
+
+      <section class="challenge" id="challenge" hidden aria-labelledby="challenge-title">
+        <div class="eyebrow" id="challenge-progress">LE PETIT DÉFI · 1 / 3</div>
+        <h2 id="challenge-title"></h2>
+        <div id="challenge-answers" class="challenge-answers"></div>
+        <p id="challenge-feedback" aria-live="polite"></p>
+        <button id="challenge-next" class="primary-small" hidden>Continuer →</button>
+      </section>
+
+      <section class="console" id="console" aria-label="Expérimenter le fonctionnement de la voiture">
+        <section class="assembly-control" aria-label="Révéler la chaîne électrique">
+          <div class="assembly-heading"><span>SOUS LA CARROSSERIE</span><span id="piece-count">Le parcours de l’énergie</span></div>
+          <div class="assembly-modes" role="group" aria-label="Niveau de détail technique">
+            <button id="assemble-car" aria-pressed="true"><span aria-hidden="true">▰</span> Voiture</button>
+            <button id="explode-car" aria-pressed="false"><span aria-hidden="true">◇</span> Chaîne électrique</button>
+            <button id="inventory-car" aria-pressed="false"><span aria-hidden="true">▦</span> Éclaté technique</button>
+          </div>
+          <div class="assembly-range"><span aria-hidden="true">−</span><input id="explode" type="range" min="0" max="100" value="0" aria-label="Révéler puis ouvrir les composants"><span aria-hidden="true">+</span><output id="explode-value" for="explode">0 %</output></div>
+        </section>
+        <div class="console-top">
+          <div class="console-caption">L’ÉNERGIE<br><strong>EN MOUVEMENT</strong></div>
+          <div class="scenario-tabs" aria-label="Choisir une expérience">
+            <button data-mode="charge" class="scenario active" aria-pressed="true"><span class="scenario-number">01</span><span class="scenario-symbol" aria-hidden="true">Ω</span><span>Recharger<small>Stocker l’énergie</small></span><span class="scenario-check"></span></button>
+            <button data-mode="drive" class="scenario" aria-pressed="false"><span class="scenario-number">02</span><span class="scenario-symbol" aria-hidden="true">↗</span><span>Rouler<small>Créer le mouvement</small></span><span class="scenario-check"></span></button>
+            <button data-mode="regen" class="scenario" aria-pressed="false"><span class="scenario-number">03</span><span class="scenario-symbol" aria-hidden="true">↩</span><span>Récupérer<small>Freiner autrement</small></span><span class="scenario-check"></span></button>
+          </div>
+          <div class="battery-display" aria-label="Batterie simulée"><span class="battery-icon"><i id="battery-fill"></i></span><span><strong id="battery-value">62,0 %</strong><small>Batterie simulée</small></span></div>
+        </div>
+        <div class="console-bottom">
+          <div class="interaction" id="charge-interaction"><button id="plug-toggle" class="plug-button"><span aria-hidden="true">Ω</span><span id="plug-label">Brancher le câble</span><span aria-hidden="true">→</span></button><p id="charge-hint">La voiture est à l’arrêt. À toi de la brancher.</p></div>
+          <div class="interaction" id="drive-interaction" hidden><label for="pedal">Accélérateur <output id="pedal-value">0 %</output></label><input id="pedal" type="range" min="0" max="100" value="0" aria-label="Pression sur l’accélérateur"><div class="speed-display"><strong id="speed-value">0</strong><span>km/h simulés</span></div></div>
+          <div class="interaction" id="regen-interaction" hidden><label for="regen">Freinage <output id="regen-value">65 %</output></label><input id="regen" type="range" min="0" max="100" value="65" aria-label="Intensité du freinage régénératif"><p id="regen-hint">Accélère d’abord pour pouvoir récupérer.</p><button class="text-action" id="drive-again">Rouler ↗</button></div>
+          <div class="energy-route" id="energy-route" aria-label="Trajet de l’énergie"><span>Borne</span><i>→</i><span>Batterie</span></div>
+        </div>
+      </section>
+    </main>
+    <footer class="footer"><span>Ohm Sweet Ohm · Comprendre en explorant</span><span id="simulation-note">Simulation pédagogique · valeurs illustratives</span><button id="sources-open">Sources & crédits ↗</button></footer>
+    <div class="loader" id="loader" role="status"><span class="loader-mark">Ω</span><p>Chaque détail se met en place.</p><small>Préparation de l’atelier 3D</small></div>
+    <p class="sr-only" id="announcement" aria-live="polite"></p>
+  </div>
+  <dialog id="about-dialog" class="about-dialog" aria-labelledby="about-title">
+    <button id="about-close" class="close-button" aria-label="Fermer les informations">×</button>
+    <div class="eyebrow">LE LAB DE L’ÉLECTRIQUE</div><h2 id="about-title">Comprendre en faisant.</h2>
+    <p>Ohm Sweet Ohm est une maquette pédagogique interactive, dont la carrosserie et l’habitacle sont adaptés d’un modèle de Tesla Model 3. Le châssis, les composants et la simulation sont pédagogiques : ils ne reproduisent pas les caractéristiques techniques exactes de cette voiture. Ohm Sweet Ohm n’est affilié à aucun constructeur.</p>
+    <h3>Ce que tu vois</h3><p>La recharge, la traction et la récupération sont trois situations distinctes. Les lueurs représentent un transfert d’énergie ; ce ne sont pas des électrons visibles. Le moteur et les engrenages sont ralentis pour rendre leurs mouvements lisibles.</p>
+    <h3>Une simulation, pas une mesure</h3><p>Les vitesses, la batterie de 60 kWh, la masse de 1 800 kg, la recharge de 11 kW et le rendement de récupération de 65 % sont des paramètres illustratifs. Le temps de recharge est accéléré 120 fois. La récupération est limitée par l’énergie du mouvement et la place disponible dans la batterie. Les freins mécaniques restent nécessaires.</p>
+    <h3>Sources pédagogiques</h3><ul><li><a href="https://afdc.energy.gov/vehicles/how-do-all-electric-cars-work" target="_blank" rel="noopener noreferrer">DOE — composants d’une voiture électrique et recharge</a></li><li><a href="https://www.fueleconomy.gov/feg/atv-ev.shtml" target="_blank" rel="noopener noreferrer">DOE / EPA — conversions, pertes et récupération</a></li><li><a href="https://onlinelibrary.wiley.com/doi/10.1155/etep/3264311" target="_blank" rel="noopener noreferrer">Moteur Model 3 — 54 encoches, six pôles et aimants enterrés</a></li><li><a href="https://news.panasonic.com/global/stories/993" target="_blank" rel="noopener noreferrer">Panasonic — cellules cylindriques 2170</a></li><li><a href="https://service.tesla.com/docs/Model3/ServiceManual/en-us/GUID-EF4FF490-1CAD-4F69-80B7-BA93994EB821.html" target="_blank" rel="noopener noreferrer">Tesla — onduleur intégré et connexions triphasées</a></li><li><a href="https://service.tesla.com/docs/Model3/ServiceManual/en-us/GUID-30AA424E-D9A3-4CCF-B948-C1776C851A0D.html" target="_blank" rel="noopener noreferrer">Tesla — chargeur embarqué et baie électronique du pack</a></li><li><a href="https://www.tesla.com/ownersmanual/model3/en_us/GUID-7FE78D73-0A17-47C4-B21B-54F641FFAEF4.html" target="_blank" rel="noopener noreferrer">Tesla — batterie et identification du circuit haute tension</a></li></ul>
+    <h3>Crédits 3D</h3><p>Carrosserie adaptée de <a href="https://sketchfab.com/3d-models/tesla-2018-model-3-5ef9b845aaf44203b6d04e2c677e444f" target="_blank" rel="noopener noreferrer">Tesla 2018 Model 3, par Ameer Studio</a>, sous <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a> : préparation conservant l’habitacle et 147 éléments séparés, mise à l’échelle, nouveaux matériaux et optimisation dans Blender. Roues, borne et nouveaux carters moteur créés dans Blender pour Ohm Sweet Ohm. Moteur en coupe, batterie à quatre modules, BMS, onduleur et chargeur : reconstructions originales inspirées de l’architecture réelle. Densité des cellules, circuits et déplacements restent simplifiés pour l’apprentissage. Les anciens scans de <a href="https://sketchfab.com/mkonstadakis" target="_blank" rel="noopener noreferrer">mkonstadakis</a>, sous CC BY 4.0, restent conservés dans les ressources historiques et ne sont plus chargés. Rendu avec Three.js r164, MIT.</p><a href="THIRD_PARTY_NOTICES.md" target="_blank" rel="noopener noreferrer">Registre complet des licences →</a>
+    <p class="about-signature">22 septembre 2026 — Ohm Sweet Ohm · conception avec Codex, OpenAI GPT-6 (variante exacte non exposée).</p>
+  </dialog>
+  <script type="importmap">{"imports":{"three":"./libs/three.module.min.js"}}</script>
+  <script type="module" src="js/main.js?v=20260930-6"></script>
+</body>
+</html>

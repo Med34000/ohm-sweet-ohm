@@ -1,0 +1,1 @@
+{"name":"ohm-sweet-ohm","version":"1.0.0","private":true,"type":"module","description":"L’électrique, de l’intérieur — laboratoire 3D pédagogique","scripts":{"start":"python3 -m http.server 8131 --bind 127.0.0.1","test":"node --test tests/*.test.js","build":"sh tools/build_dist.sh","build:check":"sh tools/build_dist.sh --check"}}
