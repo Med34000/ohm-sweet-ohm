@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><base href="/"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ohm Sweet Ohm — atelier de présentation</title>
+<script type="importmap">{"imports":{"three":"/libs/three.module.min.js"}}</script>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#151c1b;color:#edf2e8;font:14px 'Avenir Next',Arial,sans-serif}header{height:74px;display:flex;align-items:center;gap:12px;padding:0 24px}h1{font-size:17px;margin-right:auto}button,select{font:inherit;padding:10px 15px;border:0;border-radius:8px;background:#d2fa8c;color:#17291b;cursor:pointer}button:disabled{opacity:.35;cursor:wait}#preview{display:block;max-width:100%;max-height:calc(100vh - 142px);width:auto;height:auto;margin:auto}#status{padding:10px 24px;text-align:center;color:#bdcbbd}#studio{position:fixed;left:-10000px;top:0;width:1400px;height:1000px;pointer-events:none}#seek{width:35vw;accent-color:#c6ef83}footer{text-align:center;color:#738078;font-size:11px;padding:6px} .component-hover{display:none}
+</style></head><body>
+<header><h1>Ohm Sweet Ohm · atelier vidéo</h1><select id="format" aria-label="Format de la vidéo"><option value="horizontal">Horizontal · 1920 × 1080</option><option value="vertical">Vertical · 1080 × 1920</option></select><button id="play" disabled>Lire la présentation</button><button id="export" disabled>Exporter la vidéo</button><input id="seek" aria-label="Position dans la présentation" type="range" min="0" max="36" step="0.1" value="0"></header>
+<nav id="chapters" aria-label="Plans de la présentation" style="display:flex;justify-content:center;gap:6px;padding-bottom:12px"></nav>
+<canvas id="preview" width="1920" height="1080" aria-label="Aperçu de la bande-annonce Ohm Sweet Ohm"></canvas>
+<div id="status" role="status">Préparation des modèles de l’application…</div><footer>Montage original · 22 septembre 2026 — Codex / OpenAI pour Médéric Morin</footer>
+<div id="studio"></div><script type="module" src="/tools/presentation.js"></script>
+</body></html>
